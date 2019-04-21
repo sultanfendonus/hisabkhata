@@ -58,13 +58,18 @@ App.post('/registration',(req,response)=>{
         Token : ""
       }
 
+      if(!req.body.number || !req.body.pin){
+        response.send({status : 'failed'})
+      }else{
+        dbo.collection("user").insertOne(userDetails, function(err, res) {
+          if (err) throw err;
+          
+          db.close();
+          response.send({status:'success',userDetails})
+        });
+      }
       
-      dbo.collection("user").insertOne(userDetails, function(err, res) {
-        if (err) throw err;
-        
-        db.close();
-        response.send({status:'Sucess',userDetails})
-      });
+      
       
     });
 });
