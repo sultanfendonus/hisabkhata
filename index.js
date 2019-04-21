@@ -28,7 +28,7 @@ App.post('/checkNumber',(req,res)=>{
         if (err) throw err;
       
         var dbo = db.db("hisabkhata");
-        dbo.collection("user").findOne({Phone : req.body.number}, function(err, result) {
+        dbo.collection("user").findOne({PhoneNumber : req.body.number}, function(err, result) {
           if (err) throw err;
           db.close();
 
