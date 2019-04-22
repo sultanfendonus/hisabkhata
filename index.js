@@ -33,9 +33,9 @@ App.post('/checkNumber',(req,res)=>{
           db.close();
 
           if(result === null){
-            res.send({status : "new",result})
+            res.send({status : "new"})
           }else{
-            res.send({status: "old",result})
+            res.send({status: "old"})
           }
         });
         
@@ -74,6 +74,27 @@ App.post('/registration',(req,response)=>{
     });
 });
 
+
+//Login A User
+App.post('/login',(req,response)=>{
+
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+  
+    var dbo = db.db("hisabkhata");
+    dbo.collection("user").findOne({PhoneNumber : req.body.number,pin : req.body.pin}, function(err, result) {
+      if (err) throw err;
+      db.close();
+
+      if(result === null){
+        response.send({status : "failed",result})
+      }else{
+        response.send({status: "success",result})
+      }
+    });
+    
+  });
+});
 
 
 
