@@ -12,9 +12,16 @@ var url = "mongodb://localhost:27017/";
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
   var dbo = db.db("hisabkhata");
+  //user login data
   dbo.createCollection("user", function(err, res) {
     if (err) throw err;
     console.log("Collection created!");
+  });
+
+  //transections data
+  dbo.createCollection("transections", function(err, res) {
+    if (err) throw err;
+    console.log("Transections Collection created!");
     db.close();
   });
 });
@@ -94,6 +101,45 @@ App.post('/login',(req,response)=>{
     });
     
   });
+});
+
+
+
+//Save Transections Data
+App.post('/addTransections',(req,response)=>{
+
+  MongoClient.connect(url, function(err, db) {
+      if (err) throw err;
+    
+      var dbo = db.db("hisabkhata");
+      var transectionsDetails = {
+        tansectionTitle : req.body.tansectionTitle,
+        tansectionDate : req.body.tansectionDate,
+        unit : req.body.unit,
+        quantity : req.body.quantity,
+        quantityPrice : req.body.quantityPrice,
+        totalPrice : req.body.totalPrice,
+        transectionsStatus : req.body.transectionsStatus,
+        paidAmount : req.body.paidAmount,
+        due : req.body.due,
+        phoneNumber : req.body.phoneNumber,
+        type : req.body.type
+      }
+
+      if(!req.body.type || !req.body.phoneNumber){
+        response.send({status : 'failed'})
+      }else{
+        dbo.collection("transections").insertOne(transectionsDetails, function(err, res) {
+          if (err) throw err;
+          
+          db.close();
+          response.send({status:'success',transectionsDetails})
+        });
+      }
+      
+      
+
+    });
 });
 
 
