@@ -126,15 +126,30 @@ App.post('/addTransections',(req,response)=>{
         type : req.body.type
       }
 
-      if(!req.body.type || !req.body.phoneNumber){
+      if(!req.body.type || !req.body.phoneNumber || req.body.phoneNumber === ""){
         response.send({status : 'failed'})
       }else{
-        dbo.collection("transections").insertOne(transectionsDetails, function(err, res) {
+
+        dbo.collection("user").findOne({PhoneNumber : req.body.phoneNumber}, function(err, result) {
           if (err) throw err;
           
-          db.close();
-          response.send({status:'success',transectionsDetails})
+
+          if(result === null){
+            response.send({status : "notExist"})
+            db.close();
+          }else{
+            dbo.collection("transections").insertOne(transectionsDetails, function(err, res) {
+              if (err) throw err;
+              
+              db.close();
+              response.send({status:'success',transectionsDetails})
+            });
+            
+          }
         });
+
+
+        
       }
       
       
