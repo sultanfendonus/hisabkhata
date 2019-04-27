@@ -147,15 +147,50 @@ App.post('/addTransections',(req,response)=>{
             
           }
         });
-
-
-        
       }
-      
-      
-
     });
 });
+
+
+
+
+//Find Transection by keyword
+App.post('/findTransections',(req,res)=>{
+
+  let filterObject;
+
+  if(req.body.type==="all"){
+    filterObject = {
+      phoneNumber : req.body.phoneNumber
+    }
+  }else{
+    filterObject = {
+      phoneNumber : req.body.phoneNumber,
+      type : req.body.type
+    }
+  }
+
+
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db("hisabkhata");
+    dbo.collection("transections").find(filterObject).toArray(function(err, result) {
+      if (err) throw err;
+      db.close();
+
+      if(result.length < 1){
+        res.send({status : "No Data"})
+      }else{
+        res.send({status: "success",result})
+      }
+
+    });
+  });
+
+
+
+});
+
 
 
 
