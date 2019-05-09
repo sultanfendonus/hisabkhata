@@ -171,12 +171,12 @@ App.post('/findTransections',(req,res)=>{
       type : req.body.type
     }
   }
-
+  var mysort = { _id: -1 };
 
   MongoClient.connect(url, function(err, db) {
     if (err) throw err;
     var dbo = db.db("hisabkhata");
-    dbo.collection("transections").find(filterObject).toArray(function(err, result) {
+    dbo.collection("transections").find(filterObject).sort(mysort).toArray(function(err, result) {
       if (err) throw err;
       db.close();
 
