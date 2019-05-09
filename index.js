@@ -8,6 +8,8 @@ App.use(bodyParser.urlencoded({extended: true}));
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
 
+var ObjectId = require('mongodb').ObjectID;
+
 //initialize DB
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
@@ -192,8 +194,47 @@ App.post('/findTransections',(req,res)=>{
 });
 
 
+//update a transections
+App.post('/updateTransection',(req,response)=>{
+
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db("hisabkhata");
+    var myquery = { _id: ObjectId(req.body.id) };
+    var newvalues = { $set: {paidAmount: req.body.paidAmount, due: req.body.due } };
+    dbo.collection("transections").updateOne(myquery, newvalues, function(err, res) {
+      if (err) throw err;
+  
+      response.send({status: "success"});
+    
+      db.close();
 
 
+    });
+  });
+
+});
+
+
+//Delete a transections
+App.post('/deleteTransection',(req,response)=>{
+
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db("hisabkhata");
+    var myquery = { _id: ObjectId(req.body.id) };
+  dbo.collection("transections").deleteOne(myquery, function(err, obj) {
+    if (err) throw err;
+    
+    response.send({status: "success"});
+  
+      db.close();
+
+
+    });
+  });
+
+});
 
 
 
