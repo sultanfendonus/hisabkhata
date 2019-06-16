@@ -1,5 +1,6 @@
 const express = require('express');
 var bodyParser = require('body-parser');
+const publicIp = require('public-ip');
 const App = express();
 // Create application/json parser
 App.use(bodyParser());
@@ -235,6 +236,16 @@ App.post('/deleteTransection',(req,response)=>{
   });
 
 });
+
+
+//Get Ip adress
+
+App.get('/getIP', getClientIP);
+
+function getClientIP(req, res, next) {
+  var ip = req.ip;
+  res.send(ip);
+}
 
 
 
