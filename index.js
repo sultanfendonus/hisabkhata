@@ -254,7 +254,7 @@ function getClientIP(req, res, next) {
 App.get('/getNN', getClientNN);
 
 function getClientNN(req, res, next) {
-      sgMail.setApiKey("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");
+      sgMail.setApiKey("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");
     const msg = {
       to: 'sunnysultan1640@gmail.com',
       from: 'info@adfendo.com',
