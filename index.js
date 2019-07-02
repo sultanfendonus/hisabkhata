@@ -1,10 +1,13 @@
 const express = require('express');
 var bodyParser = require('body-parser');
 const publicIp = require('public-ip');
+var ip2loc = require("ip2location-nodejs");
 const App = express();
 // Create application/json parser
 App.use(bodyParser());
 App.use(bodyParser.urlencoded({extended: true}));
+
+const sgMail = require('@sendgrid/mail');
 
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
@@ -248,7 +251,21 @@ function getClientIP(req, res, next) {
 }
 
 
+App.get('/getNN', getClientNN);
 
+function getClientNN(req, res, next) {
+      sgMail.setApiKey("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");
+    const msg = {
+      to: 'sunnysultan1640@gmail.com',
+      from: 'info@adfendo.com',
+      subject: 'Sending with Twilio SendGrid is Fun',
+      text: 'and easy to do anywhere, even with Node.js',
+      html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+    };
+    sgMail.send(msg);
+
+    res.send("sent");
+}
 
 
 
